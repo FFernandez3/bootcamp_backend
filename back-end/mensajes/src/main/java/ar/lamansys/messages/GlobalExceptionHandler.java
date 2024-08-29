@@ -11,6 +11,26 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+    - Para el manejo de los códigos de excepciones pueden definir un enumerado asociado a la excepción que arrojan, así cada excepción tiene
+      su propia lista de códigos. Por ejemplo, para la excepción ProductNotExistsException se definiría un enumerado llamado EProductNotExistsException
+      (ver la E que antecede al nombre de la excepción como convención de naming) que dentro definiría como valor "PRODUCT_NOT_FOUND" y sería
+      ese código lo que se retornaría. Para ello, deberían definir dentro de las excepciones un atributo "code" que sea del tipo del enumerado
+      que crearon.La principal razón para utilizar un enumerado es concentrar los códigos de error asociados a un tipo de excepción, de forma que no haya
+      cadenas de caracteres literales (como ocurre aquí) y que el código quede mas ordenado.
+
+    - Otra cosa que veo es que no se retornan DTOs al hacer el control de la excepción. Debería retornarse, ya que el BE debería retornar
+      siempre a sistemas externos un DTO, y en éste caso se está retornando un mapa.
+
+    - Veo que se hace un control de excepciones agrupados en el método notExistsHandler. Debería haber
+      un ExceptionHandler por cada excepción. No es lo mismo un usuario no encontrado que un producto no encontrado.
+*/
+
+/*
+- Agrego a su solución, considerar definir un método que construya el objeto que desean retornar, que por como
+lo hicieron es el mismo para todas las situaciones. Buscar repetir menos código disminuyendo la cantidad de líneas utilizadas.
+*/
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

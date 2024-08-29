@@ -25,6 +25,16 @@ public class DeleteProductFromCart {
     private final AssertUserExists assertUserExists;
     private final AssertCartIsNotFinalized assertCartIsNotFinalized;
 
+    /*
+      - La variable deletedProduct se setea en ambos cursos del if, por lo que podría sacarse fuera junto a la definición de la variable.
+      - La constante 1 tendría que estar definida y no usar un literal, aporta legibilidad al código.
+      - Por qué devolver todos los datos de un producto que se quita de un carrito?
+      - El caso de uso se encarga de eliminar el producto de un carrito, ¿también debería encargarse de eliminar el carrito si ya no almacena productos?
+      -    Lo menciono por dos razones:
+      -       - El nombre del caso de uso dice "borrar producto de un carrito" en lugar de "borrar producto de un carrito y el carrito si está vacío"... Si bien esta
+      -           obervación es debatible, parece no cumplir con el principio de única responsabilidad.
+      -       - Otro caso de uso podría no enterarse que el carrito fue eliminado.
+    */
     public CartProductBo run (Integer cartId, Integer productId, String appUserId) throws CartUserNotExistsException, ProductNotInCartException, UserNotExistsException {
         //verificar que el usuario exista
         assertUserExists.run(appUserId);

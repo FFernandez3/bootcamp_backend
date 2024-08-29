@@ -22,6 +22,7 @@ public interface CartProductRepository extends JpaRepository<CartProduct, CartPr
     Stream<ProductShowCartBo> findAllByCartId(@Param("cartId") Integer cartId);
 
 
+    //Éste método actualiza el precio además de la cantidad. Lo renobraría para ser mas específico.
     @Modifying
     @Query("UPDATE CartProduct cp SET cp.quantity = :quantity, cp.quantityPrice = :quantityPrice WHERE cp.id.cartId = :cartId AND cp.id.productId = :productId")
     Integer updateQuantity(@Param("quantity") Integer quantity, @Param("cartId") Integer cartId, @Param("productId") Integer productId, @Param("quantityPrice") Integer quantityPrice);
@@ -32,6 +33,7 @@ public interface CartProductRepository extends JpaRepository<CartProduct, CartPr
     @Query("SELECT sum(cp.quantityPrice) FROM CartProduct cp WHERE cp.id.cartId = :cartId")
     Integer calculateTotalPrice(@Param("cartId") Integer cartId);
 
+    // Por qué generar un insert utilizando una query nativa y no creando una instancia de la entidad y usar el save provisto por JPA?
     @Modifying
     @Query(value = "INSERT INTO cart_product (cart_id, product_id, quantity, quantity_price) VALUES (:cartId, :productId, :quantity, :quantityPrice)", nativeQuery = true)
     Integer addProductToCart(@Param("cartId") Integer cartId, @Param("productId") Integer productId, @Param("quantity") Integer quantity, @Param("quantityPrice") Integer quantityPrice);
@@ -40,6 +42,7 @@ public interface CartProductRepository extends JpaRepository<CartProduct, CartPr
     @Query("DELETE FROM CartProduct cp WHERE cp.id.cartId = :cartId AND cp.id.productId = :productId")
     void deleteProductFromCart(@Param("cartId") Integer cartId,@Param("productId") Integer productId);
 
+    //Una forma un poco mas eficiente de hacer ésto sería hacer un COUNT(1), ya que los valores de CartProduct no me importan en absoluto.
     @Query("SELECT COUNT(cp) FROM CartProduct cp WHERE cp.id.cartId = :cartId")
     long countByCartId(@Param("cartId") Integer cartId);
 }

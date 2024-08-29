@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @AllArgsConstructor
-@Transactional
+@Transactional //Por qué ésto a nivel de clase?
 @Service
 public class CreateCart {
     private final CartStorage cartStorage;
@@ -30,7 +30,13 @@ public class CreateCart {
     private final ProductStorage productStorage;
     private final CartProductStorage cartProductStorage;
 
-
+    /*
+      - Siempre que sea posible está bueno minimizar el acceso a la base de datos. Deben acceder a la hora de hacer las validaciones porque no
+        tienen esos datos a mano. Sin embargo, una vez pasadas las mismas deberían ser capaz, en una sola consulta, de obtener todos los datos
+        necesarios para satisfacer su caso de uso. Aquí buscan el sellerId con una consulta para luego ir y buscar el unitPrice utilizando
+        exactamente el mismo parámetro (el productId). Lo mejor sería hacer una única consulta que reciba el productId y retorne un tipo de dato
+        (BO) que esté conformado por el id del vendedor y el precio unitario del producto.
+    */
     public CartStoredBo run(String userId, NewCartBo cartBO) throws UserNotExistsException, ProductNotExistsException, StockNotAvailableException, OpenCartException {
         assertUserExists.run(userId);
         assertProductExists.run(cartBO.getProductId());

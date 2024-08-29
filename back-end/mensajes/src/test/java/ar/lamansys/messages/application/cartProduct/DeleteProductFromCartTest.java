@@ -22,13 +22,13 @@ public class DeleteProductFromCartTest {
     @Mock
     private CartStorage cartStorage;
 
-    @Mock
+    @Mock // sin cobertura de test
     private AssertCartUserExist assertCartUserExist;
 
-    @Mock
+    @Mock // sin cobertura de test
     private AssertProductInCartExist assertProductInCartExist;
 
-    @Mock
+    @Mock // sin cobertura de test
     private AssertUserExists assertUserExists;
 
     @Mock

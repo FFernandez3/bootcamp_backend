@@ -70,6 +70,7 @@ databaseChangeLog:
                   name: app_user_id
                   type: varchar
 
+  # No está bueno que queden comentarios en el liquibase.
   - changeSet:
       id: create-table-cart_product
       comment: Adds table cart_product
@@ -103,6 +104,10 @@ databaseChangeLog:
                   name: quantity_price
                   type: int
 
+  # Para la definición de FKs y PKs no es necesario crear un nuevo changeSet, pueden hacerlo junto a la creación de la tabla.
+  # Lo importante es que sea atómica la acción. En éste caso, lo importante y lo que debería ser atómico es la creación de la tabla
+  # y que la misma cuente con todos los datos necesarios para su correcto funcionamiento. Cualquier cambio que surja a posteriori
+  # debería ser incluído en un nuevo changeSet. No sé si me explico.
   - changeSet:
       id: add-foreign-key-constraints-table-cart
       comment: Add foreign key constraints in table cart
@@ -155,6 +160,8 @@ databaseChangeLog:
             tableName: cart_product
             validate: true
 
+  # En éste caso está bien aplicado ya que a posteriori vieron la necesidad de añadir un nuevo atributo a la tabla y no modificaron
+  # el changeSet original, sino que crearon uno nuevo.
   - changeSet:
       id: add-column-cart-seller_id
       comment: Adds column seller_id on table cart
@@ -181,6 +188,9 @@ databaseChangeLog:
             referencedTableName: app_user
             validate: true
 
+# Considerar aplicar la inserción de datos a través de una sola transacción. Más allá de que en este caso se tratan de pocos datos,
+# sugiero que los valores sean ingresados todos juntos de forma atómica, asegurándose que si alguno de ellos falla, la base de datos no queda en ningún
+# momento en un estado "intermedio" o inconsistente.
   - changeSet:
       id: add-data-table-app_user
       comment: Add data to table app_user
@@ -191,7 +201,14 @@ databaseChangeLog:
               INSERT INTO app_user (id, username, password, email) VALUES ('user1', 'username1', 'password1', 'user1@example.com');
               INSERT INTO app_user (id, username, password, email) VALUES ('user2', 'username2', 'password2', 'user2@example.com');
               INSERT INTO app_user (id, username, password, email) VALUES ('user3', 'username3', 'password3', 'user3@example.com');
+# En referencia al comentario anterior, la sentencia sql quedaría de esta forma:
+#             INSERT INTO app_user (id, username, password, email) VALUES ('user1', 'username1', 'password1', 'user1@example.com'),
+#                                                                         ('user2', 'username2', 'password2', 'user2@example.com'),
+#                                                                         ('user3', 'username3', 'password3', 'user3@example.com');
+# Entonces el cambio se realiza una sola vez. Además nos conviene hacerlo por cuestiones de performance, ya que es mucho más barato
+# que ir realizando transacciones más pequeñas muchas veces. Recuerden esto siempre llevado a millones de datos...
 
+# Ídem el changeSet de aquí debajo
   - changeSet:
       id: add-data-table-product
       author: flor

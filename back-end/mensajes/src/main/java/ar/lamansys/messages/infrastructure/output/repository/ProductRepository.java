@@ -34,6 +34,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "WHERE p.id = :productId")
     String getSellerByProductId(@Param("productId") Integer productId);
 
+    /*
+    - getUnitPrice y findPriceByProductId ¿hacen lo mismo, no?
+     */
     @Query("SELECT p.unitPrice " +
             "FROM Product p " +
             "WHERE p.id = :productId")
@@ -44,6 +47,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             " WHERE p.id=:productId")
     Integer findPriceByProductId(@Param("productId")Integer productId);
 
+    /*
+      Cuando usamos operaciones  de borrado o actualización solemos utilizar la etiqueta @Transactional para indicar
+      que la operación no es solo lectura (ya que por defecto el atributo readOnly se encuentra en false).
+    */
     @Modifying
     @Query("UPDATE Product p" +
             " SET p.stock=:newStock" +

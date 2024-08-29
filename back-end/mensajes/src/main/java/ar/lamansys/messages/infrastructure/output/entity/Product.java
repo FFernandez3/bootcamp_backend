@@ -21,7 +21,7 @@ public class Product {
     private Integer id;
 
     @Column(name = "name_product", nullable = false)
-    private String name;
+    private String name; //Debería llamarse nameProduct
 
     @Column(name = "stock", nullable = false)
     private Integer stock;
@@ -30,7 +30,7 @@ public class Product {
     private Integer unitPrice;
 
     @Column(name = "app_user_id", nullable = false)
-    private String userId;
+    private String userId; //Debería llamarse appUserId
 
     public Product(Integer id) {
         this.id = id;

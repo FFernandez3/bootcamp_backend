@@ -20,7 +20,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+//Quedaron imports sin utilizar.
+
 @AllArgsConstructor
+/*
+- ¿Es realmente necesario definir el caso de uso como @Transactional?
+ */
 @Transactional
 @Service
 public class GetCartState {
@@ -30,6 +35,11 @@ public class GetCartState {
     private final CartProductStorage cartProductStorage;
     private final AssertCartUserExist assertCartUserExist;
 
+    /*
+      Aquí se buscan por un lado los productos del carrito y por otro, si es que las validaciones son superadas exitosamente, el precio
+      del mismo. Haría un único método que retorne un BO que tenga por datos el Stream de productos y su precio. Por qué? Porque se minimiza
+      el acceso a la DB y además es preferible tener todos los datos que sean necesarios para completar el flujo una sola vez.
+    */
     public CartSummaryBo run(Integer cartId, String userId) throws UserNotExistsException, ProductNotExistsException, StockNotAvailableException, OpenCartException {
         assertUserExists.run(userId);
         assertCartUserExist.run(cartId, userId);

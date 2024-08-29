@@ -45,7 +45,7 @@ public class CartControllerTest {
     @Mock
     private CartProductMapper cartProductMapper;
 
-    @Mock
+    @Mock // sin cobertura de test?
     private FinalizeCart finalizeCart;
 
     @InjectMocks

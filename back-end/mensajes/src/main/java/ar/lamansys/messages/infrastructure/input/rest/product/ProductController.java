@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
+// Para el path del endpoint quitaría el plural de products y lo dejaría product (como la política de naming de las tablas de la base de datos).
+
 @RestController
 @AllArgsConstructor
 @Tag(name="Product",  description = "Operaciones relacionadas con los productos")

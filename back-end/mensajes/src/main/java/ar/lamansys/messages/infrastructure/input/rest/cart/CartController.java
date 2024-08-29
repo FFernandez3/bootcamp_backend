@@ -28,6 +28,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/*
+ - Generalmente colocamos las etiquetas de los Beans de Spring justo antes de la definición de la clase. En éste caso, @RestController
+   debería estar debajo de @RequestMapping (un detalle).
+ */
+
 @RequiredArgsConstructor
 @RestController
 @Tag(name="Cart", description = "Operaciones relacionadas con los carritos de compra")
@@ -35,11 +40,15 @@ import javax.validation.Valid;
 public class CartController {
     private final CreateCart createCart;
     private final CartMapper cartMapper;
-    private final ListProducts listProducts;
+    private final ListProducts listProducts; //Constante no se utiliza
     private final GetCartState getCartState;
     private final CartProductMapper cartProductMapper;
     private final FinalizeCart finalizeCart;
 
+    /*
+     - No es necesario poner un string vacío. Con solo usar @PostMapping ya se dá cuenta que debe usar el path mas general (en éste caso /cart)
+     - El userId para el request no lo mandaría en el encabezado sino como variable de ruta.
+    */
     @PostMapping("")
     @Operation(summary = "Crear un carrito",
             description = "Este endpoint se utiliza para crear un carrito de compra con productos especificados para un usuario."
@@ -56,6 +65,12 @@ public class CartController {
         return ResponseEntity.status(201).body(response);
     }
 
+    /*
+     - El path del endpoint es muy genérico. El GET se hace a la ruta "/cart/{cartId}" lo que me hace pensar que va a retornar toda la información
+       del carrito que tiene por id cartId. Sin embargo, en realidad me devuelve el estado del mismo. Renombraría el path del endpoint a algo así
+       como "/{cartId}/status" como para que quede no de lugar a confusiones. Entiendo que puede ser una cuestión de diseño y
+       que Swagger va a tener la información correcta, pero no hay mejor documentación que su código.
+    */
     @GetMapping("/{cartId}")
     @Operation(summary = "Obtener estado de carrito",
             description = "Este endpoint se utiliza para ver el estado del carrito.")

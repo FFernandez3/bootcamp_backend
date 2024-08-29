@@ -1,0 +1,35 @@
+# Revisión
+
+## Documentación
+- La documentación está muy completa y es clara.
+
+## Java
+(SOLID, Java funcional, acoplamiento, responsabilidades, manejo de excepciones, etc)
+- Delegación de responsabilidades bien, mejorable.
+- Buen uso de java funcional.
+- El retorno del resultado de los casos de uso es mejorable.
+
+## Spring Boot
+(inyeccion de dependencias, uso de HandlerException, poca responsabilidad en Controllers, etc)
+- Uso absoluto de IoC.
+
+## Unit Test
+(test presentes, bien escritos, % coverage de linea, pasan OK)
+- Ejecutan OK, están muy completos.
+
+## JPA Definicion de JpaRepository
+- Las entidades y repositorios están en general bien implementados y coinciden con aquellos cambios incluidos en Liquibase. Particularidades comentadas dentro del código.
+
+## Security
+- No hay implementación de seguridad.
+
+## Liquibase
+- Los cambios en la base de datos están bien incluidos dentro de liquibase. Buen uso de los changeSet y de los archivos de versiones. Particularidades comentadas dentro del código.
+
+## Hexagonal
+- La arquitectura está bien planteada y el código bien organizado. Los paquetes están bien nombrados y en su interior se encuentran los subpaquetes correspondientes.
+
+## Aspectos generales
+- Demasiados comentarios en el código. Hay veces donde se justifica colocar comentarios porque esclarecen un aspecto importante dentro del flujo, pero lo ideal es que el código pueda ser
+leido sin la necesidad de éstos.
+

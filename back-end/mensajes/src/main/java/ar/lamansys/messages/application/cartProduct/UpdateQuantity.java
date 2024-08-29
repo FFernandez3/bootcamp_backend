@@ -26,6 +26,16 @@ public class UpdateQuantity {
     private final CartStorage cartStorage;
     private final AssertCartIsNotFinalized assertCartIsNotFinalized;
 
+    /*
+    - Lo anoto acá pero este comentario se refiere a la ALTA/BAJA/MODIFICACION del producto. Si prestan atención a los tres
+      casos de uso, lo único que varían es la operación de actualización sobre el producto en el carrito, propagando
+      las validaciones previas, y el cálculo posterior del nuevo precio del carrito. Al principio esto funciona bien,
+      por eso es que esto no es grave, de hecho esta es la manera sencilla para comenzar el desarrollo de las features porque
+      al principio no conocemos hasta donde van a evolucionar... Sin embargo pensemos que puede que haga falta otro caso de uso
+      más, que se ocupe de estas reglas del negocio tanto previas como posteriores al cambio (que las centralicen,
+      quitándoles así la responsabilidad delegada a cada caso de uso de hacerlas cumplir).
+      Puede que para tres casos de usos internos en el proyecto alcance y sobre, pero en el futuro puede no ser deseable y mantenible.
+     */
     public void run(Integer cartId, String appUserId, Integer productId, Integer newQuantity) throws CartUserNotExistsException, ProductNotInCartException, StockNotAvailableException {
 
         //chequear que el carrito exista y pertenezca al usuario

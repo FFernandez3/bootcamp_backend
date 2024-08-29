@@ -6,6 +6,9 @@ import java.util.Optional;
 
 public interface CartStorage {
 
+    /*
+    - Detalle. En lugar de is_finalized, definir isFinalized como en la implementación de esta clase :)
+    */
     CartStoredBo createCart(String userId, Integer totalPrice, Boolean is_finalized, String sellerId);
     CartStoredBo getCartExists(String userId, String idSeller);
     Optional<CartStoredBo> findByIdAndAppUserId(Integer id, String appUserId);

@@ -20,6 +20,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/*
+  - No está bueno que dos controllers diferentes compartan la raíz de su path (en éste caso /cart con el controller de carrito).
+  - Veo que todos los endpoints siguen el mismo patrón "/{cartId}/product/{productId}". Me parece que quedaría mejor hacer un DTO que tenga
+  esos dos atributos y, relacionándolo con el comentario anterior, renombrar la raíz a algo así como "/cart-product".
+*/
+
 @RequiredArgsConstructor
 @RestController
 @Tag(name="CartProduct",  description = "Operaciones relacionadas con los productos en un carrito")
@@ -30,6 +36,11 @@ public class CartProductController {
     private final DeleteProductFromCart deleteProductFromCart;
     private final CartProductMapper mapper;
 
+    /*
+      - Éste controller tiene muchos parámetros y el DTO tiene un solo atributo lo que hace que practicamente no valga la pena definirlo
+        así como está. Hay atributos que podrían ir dentro de ese DTO. En caso de agruparlo lo renombraría para que sea mas representativo
+        del flujo que se desea satisfacer.
+    */
     @PutMapping("/{cartId}/product/{productId}")
     @Operation(summary = "Actualizar cantidad",
             description = "Este endpoint se utiliza para cambiar la cantidad de un producto agregado al carrito.")
@@ -46,6 +57,11 @@ public class CartProductController {
         return ResponseEntity.ok("The quantity of the product was succesfully changed");
     }
 
+    /*
+      - Se pasan datos como parámetros que podrían estar dentro del DTO que reciben sin ningún problema. Hay una "regla" que dice que
+        si se envían mas de 4 parámetros a un método se podría crear un objeto que contenga los mismos. Además, me despierta una apregunta
+        la estructura de DTO. Por qué colocar dentro el userId y no fuera como en la mayoría de los endpoints?
+    */
     @PostMapping("/{cartId}/product/{productId}")
     @Operation(summary = "Agregar un producto al carrito",
             description = "Este endpoint se utiliza para agregar un producto del mismo vendedor al carrito de compras.")

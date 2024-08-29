@@ -53,6 +53,9 @@ public class CreateCartTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    /*
+      - Los métodos void por defecto no hacen nada, por lo que los doNothing no son necesarios.
+    */
     @Test
     void run_whenValidInput_shouldCreateCartAndReturnCartStoredBo() throws Exception {
         // Arrange
@@ -101,7 +104,7 @@ public class CreateCartTest {
         String userId = "user123";
         Integer productId = 1;
         NewCartBo cartBo = new NewCartBo(productId, 2);
-        doNothing().when(assertUserExists).run(userId);
+        doNothing().when(assertUserExists).run(userId); //No es necesario.
         doThrow(new ProductNotExistsException(productId)).when(assertProductExists).run(productId);
 
         // Act & Assert
@@ -115,8 +118,8 @@ public class CreateCartTest {
         Integer productId = 1;
         Integer quantity = 10;
         NewCartBo cartBo = new NewCartBo(productId, quantity);
-        doNothing().when(assertUserExists).run(userId);
-        doNothing().when(assertProductExists).run(productId);
+        doNothing().when(assertUserExists).run(userId); //No es necesario.
+        doNothing().when(assertProductExists).run(productId); //No es necesario.
         doThrow(new StockNotAvailableException(productId, quantity, 5)).when(assertStockAvailable).run(productId, quantity);
 
         // Act & Assert
@@ -129,9 +132,9 @@ public class CreateCartTest {
         String userId = "user123";
         Integer productId = 1;
         NewCartBo cartBo = new NewCartBo(productId, 2);
-        doNothing().when(assertUserExists).run(userId);
-        doNothing().when(assertProductExists).run(productId);
-        doNothing().when(assertStockAvailable).run(productId, cartBo.getQuantity());
+        doNothing().when(assertUserExists).run(userId); //No es necesario.
+        doNothing().when(assertProductExists).run(productId); //No es necesario.
+        doNothing().when(assertStockAvailable).run(productId, cartBo.getQuantity()); //No es necesario.
         doThrow(new OpenCartException("seller123")).when(assertOpenCartBetweenSellerAndBuyerNotExists).run(userId, productId);
 
         // Act & Assert

@@ -27,7 +27,7 @@ public class ListProductsTest {
         List<ProductStoredBo> expectedProducts = List.of(
                 new ProductStoredBo( "Product1", 40, 600, userId)
         );
-        doNothing().when(assertUserExists).run(userId);
+        doNothing().when(assertUserExists).run(userId); //No es necesario.
         when(productStorage.findAllByUserId(userId)).thenReturn(expectedProducts.stream());
 
         // Act
@@ -54,7 +54,7 @@ public class ListProductsTest {
     void run_userExistsButNoProducts_returnsEmptyList() throws UserNotExistsException {
         // Arrange
         String userId = "user2";
-        doNothing().when(assertUserExists).run(userId);
+        doNothing().when(assertUserExists).run(userId); //No es necesario.
         when(productStorage.findAllByUserId(userId)).thenReturn(Stream.empty());
 
         // Act

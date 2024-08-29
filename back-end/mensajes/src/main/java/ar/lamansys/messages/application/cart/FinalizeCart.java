@@ -28,6 +28,14 @@ public class FinalizeCart {
     private final AssertStockAvailable assertStockAvailable;
     private final AssertCartIsNotFinalized assertCartIsNotFinalized;
 
+    /*
+      El storage ya tendría que devolver los datos de los productos como una lista. El criterio sería el siguiente: el storage me tiene
+      que dar la información tal cuál la necesita el caso de uso para satisfacer sus necesidades. En principio, esas necesidades son dos.
+      Por un lado realizar las validaciones correspondientes; y por otro continuar con el flujo en caso de que esas validaciones hayan sido
+      superadas. El método utiliza Stream porque hay otro caso de uso que así lo requiere para hacer sus validaciones, pero éste caso de uso
+      no necesita de un stream sino de una lista. Lo que se puede hacer es crear un nuevo método en el storage que retorne una lista pero
+      reutilice la consulta con la única diferencia de que el collect lo haría el storage y no el caso de uso.
+    */
     public void run(Integer cartId, String appUserId) throws CartUserNotExistsException, StockNotAvailableException, CartIsFinalizedException {
         assertCartUserExist.run(cartId, appUserId);
         assertCartIsNotFinalized.run(cartId);

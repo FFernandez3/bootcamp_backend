@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+//Hay imports sin utilizar.
+
 @RequiredArgsConstructor
 @Service
 public class ProductStorageImpl implements ProductStorage {

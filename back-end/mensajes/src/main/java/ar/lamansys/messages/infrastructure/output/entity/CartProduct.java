@@ -15,6 +15,7 @@ import javax.persistence.*;
 @Entity
 public class CartProduct {
 
+    //Debería ser privado el atributo. Por qué inicializarlo vacío?
     @EmbeddedId
     CartProductId id = new CartProductId();
 

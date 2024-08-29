@@ -30,7 +30,7 @@ public class FinalizeCartTest {
     @Mock
     private CartProductStorage cartProductStorage;
 
-    @Mock
+    @Mock // sin cobertura de test
     private AssertCartUserExist assertCartUserExist;
 
     @Mock
