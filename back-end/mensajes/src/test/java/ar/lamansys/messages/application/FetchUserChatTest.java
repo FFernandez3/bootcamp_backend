@@ -1,5 +1,6 @@
 package ar.lamansys.messages.application;
 
+import ar.lamansys.messages.application.ClearData;
 import ar.lamansys.messages.application.exception.UserNotExistsException;
 import ar.lamansys.messages.application.exception.UserSessionNotExists;
 import ar.lamansys.messages.application.message.FetchUserChat;

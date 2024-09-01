@@ -188,9 +188,10 @@ databaseChangeLog:
       changes:
         - sql:
             sql: |
-              INSERT INTO app_user (id, username, password, email) VALUES ('user1', 'username1', 'password1', 'user1@example.com');
-              INSERT INTO app_user (id, username, password, email) VALUES ('user2', 'username2', 'password2', 'user2@example.com');
-              INSERT INTO app_user (id, username, password, email) VALUES ('user3', 'username3', 'password3', 'user3@example.com');
+              INSERT INTO app_user (id, username, password, email) VALUES 
+                    ('user1', 'username1', 'password1', 'user1@example.com'),
+                    ('user2', 'username2', 'password2', 'user2@example.com'),
+                    ('user3', 'username3', 'password3', 'user3@example.com');
 
   - changeSet:
       id: add-data-table-product
@@ -199,8 +200,9 @@ databaseChangeLog:
       changes:
         - sql:
             sql: |
-              INSERT INTO product (id, name_product, stock, unit_price, app_user_id) VALUES (1, 'Product1', 40, 600, 'user1');
-              INSERT INTO product (id, name_product, stock, unit_price, app_user_id) VALUES (2, 'Product2', 120, 7500, 'user2');
-              INSERT INTO product (id, name_product, stock, unit_price, app_user_id) VALUES (3, 'Product3', 200, 5030, 'user3');
-              INSERT INTO product (id, name_product, stock, unit_price, app_user_id) VALUES (4, 'Product4', 30, 30000, 'user3');
-              INSERT INTO product (id, name_product, stock, unit_price, app_user_id) VALUES (5, 'Product5', 9, 1000, 'user3');
+              INSERT INTO product (name_product, stock, unit_price, app_user_id) VALUES
+                         ('Product1', 40, 600, 'user1'),
+                         ('Product2', 120, 7500, 'user2'),
+                         ('Product3', 200, 5030, 'user3'),
+                         ('Product4', 30, 30000, 'user3'),
+                         ('Product5', 9, 1000, 'user3');

@@ -97,6 +97,13 @@ public class GlobalExceptionHandler {
         errorResponse.put("message", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
     }
+    @ExceptionHandler(UserIsDiferentFromSellerException.class)
+    public ResponseEntity<Map<String, String>> userDiferentFromSellerHandler(UserIsDiferentFromSellerException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("code", "USER_DIFERENT_FROM_SELLER");
+        errorResponse.put("message", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
 
 
 }

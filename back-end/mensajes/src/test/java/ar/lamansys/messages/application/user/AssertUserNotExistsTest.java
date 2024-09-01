@@ -1,4 +1,4 @@
-package ar.lamansys.messages.application;
+package ar.lamansys.messages.application.user;
 
 import ar.lamansys.messages.application.exception.UserExistsException;
 import ar.lamansys.messages.application.user.AssertUserNotExists;

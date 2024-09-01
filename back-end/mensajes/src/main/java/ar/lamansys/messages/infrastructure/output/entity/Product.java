@@ -1,5 +1,6 @@
 package ar.lamansys.messages.infrastructure.output.entity;
 
+import ar.lamansys.messages.domain.product.NewProductBo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,5 +36,10 @@ public class Product {
     public Product(Integer id) {
         this.id = id;
     }
-
+    public Product (NewProductBo bo){
+        this.name=bo.getName();
+        this.stock=bo.getStock();
+        this.unitPrice=bo.getUnitPrice();
+        this.userId=bo.getUserId();
+    }
 }
