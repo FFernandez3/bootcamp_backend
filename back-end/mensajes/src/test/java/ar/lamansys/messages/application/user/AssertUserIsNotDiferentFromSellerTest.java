@@ -4,6 +4,7 @@ import ar.lamansys.messages.application.exception.UserIsDiferentFromSellerExcept
 import static org.junit.jupiter.api.Assertions.*;
 
 
+import ar.lamansys.messages.application.product.AssertUserIsNotDiferentFromSeller;
 import org.junit.jupiter.api.Test;
 
 public class AssertUserIsNotDiferentFromSellerTest {
@@ -35,6 +36,6 @@ public class AssertUserIsNotDiferentFromSellerTest {
         // Assert
         assertEquals(userId, thrown.getUserId());
         assertEquals(sellerId, thrown.getSellerId());
-        assertEquals("The user with id "+userId+" cannot add a product for sale to the seller with id "+sellerId+". Modify your own stock.", thrown.getMessage());
+        assertEquals("User with id "+userId+" cannot modify a product for sale of seller with id "+sellerId+". Modify your own stock.", thrown.getMessage());
     }
 }

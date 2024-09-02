@@ -1,4 +1,4 @@
-package ar.lamansys.messages.application.user;
+package ar.lamansys.messages.application.product;
 
 import ar.lamansys.messages.application.exception.UserIsDiferentFromSellerException;
 import lombok.AllArgsConstructor;

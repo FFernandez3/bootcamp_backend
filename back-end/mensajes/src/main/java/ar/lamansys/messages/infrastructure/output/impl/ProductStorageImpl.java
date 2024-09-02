@@ -8,7 +8,6 @@ import ar.lamansys.messages.infrastructure.output.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
@@ -52,6 +51,11 @@ public class ProductStorageImpl implements ProductStorage {
     @Override
     public void updateStock(Integer productId, Integer newStock) {
         repository.updateStock( productId, newStock);
+    }
+
+    @Override
+    public void deleteProduct(Integer productId) {
+        repository.deleteById(productId);
     }
 
 }

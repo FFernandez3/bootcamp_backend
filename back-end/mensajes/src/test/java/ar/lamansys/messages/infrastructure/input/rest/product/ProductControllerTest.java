@@ -1,7 +1,9 @@
 package ar.lamansys.messages.infrastructure.input.rest.product;
 
+import ar.lamansys.messages.application.exception.UserIsDiferentFromSellerException;
 import ar.lamansys.messages.application.exception.UserNotExistsException;
 import ar.lamansys.messages.application.product.AddProduct;
+import ar.lamansys.messages.application.product.DeleteProduct;
 import ar.lamansys.messages.application.product.ListProducts;
 import ar.lamansys.messages.domain.product.NewProductBo;
 import ar.lamansys.messages.domain.product.ProductStoredBo;
@@ -16,9 +18,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -33,6 +37,9 @@ public class ProductControllerTest {
 
     @MockBean
     private ProductMapper productMapper;
+
+    @MockBean
+    private DeleteProduct deleteProduct;
 
     @MockBean
     private AddProduct addProduct;
@@ -89,6 +96,57 @@ public class ProductControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().string("Successfully added product."));
 
+    }
+    @Test
+    void deleteProduct_ok() throws Exception {
+        // Given
+        String userId = "validUserId";
+        Integer productId = 1;
+
+        // When
+        doNothing().when(deleteProduct).run(userId, productId);
+
+        // Then
+        mockMvc.perform(delete("/product/{productId}", productId)
+                        .header("userId", userId))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Product deleted successfully."));
+    }
+
+    @Test
+    void deleteProduct_userNotExists_throwUserNotExistsException() throws Exception {
+        // Given
+        String userId = "nonExistentUserId";
+        Integer productId = 1;
+
+        // When
+        doThrow(new UserNotExistsException(userId)).when(deleteProduct).run(userId, productId);
+
+        // Then
+        mockMvc.perform(delete("/product/{productId}", productId)
+                        .header("userId", userId))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(UserNotExistsException.class))
+                .andExpect(result -> assertThat(result.getResolvedException().getMessage()).isEqualTo("User "+userId+" don't exists"));
+    }
+
+    @Test
+    void deleteProduct_throwUserIsDiferentFromSellerException() throws Exception {
+        // Given
+        String userId = "userIdNotAuthorized";
+        Integer productId = 1;
+        String sellerId="user1";
+
+        // When
+        doThrow(new UserIsDiferentFromSellerException(userId, sellerId))
+                .when(deleteProduct).run(userId, productId);
+
+        // Then
+        mockMvc.perform(delete("/product/{productId}", productId)
+                        .header("userId", userId))
+                .andExpect(status().isForbidden())
+                .andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(UserIsDiferentFromSellerException.class))
+                .andExpect(result -> assertThat(result.getResolvedException().getMessage()).isEqualTo("User with id "+userId+" cannot modify a product for sale of seller with id "+sellerId +". Modify your own stock."));
     }
 
 }

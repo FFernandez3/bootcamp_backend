@@ -6,7 +6,6 @@ import ar.lamansys.messages.application.exception.UserIsDiferentFromSellerExcept
 import ar.lamansys.messages.application.exception.UserNotExistsException;
 import ar.lamansys.messages.application.product.port.ProductStorage;
 import ar.lamansys.messages.application.user.AssertUserExists;
-import ar.lamansys.messages.application.user.AssertUserIsNotDiferentFromSeller;
 import ar.lamansys.messages.domain.product.NewProductBo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -80,7 +79,7 @@ public class AddProductTest {
             addProduct.run(userId, newProductBo);
         });
 
-        assertEquals("The user with id "+ userId + " cannot add a product for sale to the seller with id " + newProductBo.getUserId()+ ". Modify your own stock.", thrown.getMessage());
+        assertEquals("User with id "+ userId + " cannot modify a product for sale of seller with id " + newProductBo.getUserId()+ ". Modify your own stock.", thrown.getMessage());
         verify(assertUserExists).run(userId);
         verify(assertUserIsNotDiferentFromSeller).run(userId, newProductBo.getUserId());
         verifyNoInteractions(productStorage);

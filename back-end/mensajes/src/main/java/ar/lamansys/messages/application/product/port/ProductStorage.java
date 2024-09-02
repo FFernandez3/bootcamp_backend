@@ -22,4 +22,6 @@ public interface ProductStorage {
     Integer findPriceByProductId(Integer productId);
 
     void updateStock(Integer productId, Integer newStock);
+
+    void deleteProduct(Integer productId);
 }
