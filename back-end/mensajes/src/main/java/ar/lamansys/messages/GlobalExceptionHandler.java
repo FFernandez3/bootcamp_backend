@@ -1,6 +1,8 @@
 package ar.lamansys.messages;
 
 import ar.lamansys.messages.application.exception.*;
+import ar.lamansys.messages.application.exception.DTO.ErrorDTO;
+import ar.lamansys.messages.application.exception.DTO.ValidationErrorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -8,13 +10,15 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({UserNotExistsException.class, UserSessionNotExists.class, ProductNotExistsException.class})
+    @ExceptionHandler({UserNotExistsException.class, UserSessionNotExists.class})
     public ResponseEntity<Map<String, String>> notExistsHandler(Exception ex) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("code", "NOT_FOUND");
@@ -28,82 +32,64 @@ public class GlobalExceptionHandler {
         errorResponse.put("message", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(ProductNotExistsException.class)
+    public ResponseEntity<ErrorDTO>productNotExistsExceptionHandler(ProductNotExistsException ex){
+        ErrorDTO error= new ErrorDTO(ex.getMessage(), ex.getCode().toString());
+        return new ResponseEntity<>(error, ex.getStatus());
+    }
     @ExceptionHandler(CartUserNotExistsException.class)
-    public ResponseEntity<Map<String, String>> cartUserNotExistHandler(Exception ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("code", "CART_MISMATCH");
-        errorResponse.put("message", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    public ResponseEntity<ErrorDTO>cartUserNotExistExceptionHandler(CartUserNotExistsException ex){
+        ErrorDTO error= new ErrorDTO(ex.getMessage(), ex.getCode().toString());
+        return new ResponseEntity<>(error, ex.getStatus());
     }
-
-    @ExceptionHandler(OpenCartException.class)
-    public ResponseEntity<Map<String, String>> openCartHandler(Exception ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("code", "OPEN_CART_ALREADY_EXIST");
-        errorResponse.put("message", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-    @ExceptionHandler(StockNotAvailableException.class)
-    public ResponseEntity<Map<String, String>> stockNotAvailableHandler(Exception ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("code", "INSUFFICIENT_STOCK");
-        errorResponse.put("message", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> methodArgumentNotValidHandler(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach(error->{
-            String fieldName=((FieldError) error).getField();
-            String errorMessage=error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
+   @ExceptionHandler(OpenCartException.class)
+   public ResponseEntity<ErrorDTO>openCartExceptionHandler(OpenCartException ex){
+       ErrorDTO error= new ErrorDTO(ex.getMessage(), ex.getCode().toString());
+       return new ResponseEntity<>(error, ex.getStatus());
+   }
+   @ExceptionHandler(StockNotAvailableException.class)
+   public ResponseEntity<ErrorDTO>stockNotAvailableExceptionHandler(StockNotAvailableException ex){
+       ErrorDTO error= new ErrorDTO(ex.getMessage(), ex.getCode().toString());
+       return new ResponseEntity<>(error, ex.getStatus());
+   }
     @ExceptionHandler(ProductNotInCartException.class)
-    public ResponseEntity<Map<String, String>> productNotInCartHandler(ProductNotInCartException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("code", "PRODUCT_IN_CART_MISMATCH");
-        errorResponse.put("message", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    public ResponseEntity<ErrorDTO>productNotInCartExceptionHandler(ProductNotInCartException ex){
+        ErrorDTO error= new ErrorDTO(ex.getMessage(), ex.getCode().toString());
+        return new ResponseEntity<>(error, ex.getStatus());
     }
-
     @ExceptionHandler(ProductInCartException.class)
-    public ResponseEntity<Map<String, String>> productInCartHandler(ProductInCartException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("code", "PRODUCT_IN_CART_EXISTS");
-        errorResponse.put("message", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorDTO>productInCartExceptionHandler(ProductInCartException ex){
+        ErrorDTO error= new ErrorDTO(ex.getMessage(), ex.getCode().toString());
+        return new ResponseEntity<>(error, ex.getStatus());
     }
     @ExceptionHandler(ProductFromDiferentSellerException.class)
-    public ResponseEntity<Map<String, String>> productFromDiferentSellerHandler(ProductFromDiferentSellerException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("code", "PRODUCT_FROM_DIFFERENT_SELLER");
-        errorResponse.put("message", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    public ResponseEntity<ErrorDTO>productFromDiferentSellerExceptionHandler(ProductFromDiferentSellerException ex){
+        ErrorDTO error= new ErrorDTO(ex.getMessage(), ex.getCode().toString());
+        return new ResponseEntity<>(error, ex.getStatus());
     }
-    @ExceptionHandler(CartIsFinalizedException.class)
-    public ResponseEntity<Map<String, String>> cartIsFinalizedHandler(CartIsFinalizedException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("code", "CART_IS_FINALIZED");
-        errorResponse.put("message", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
-    }
+   @ExceptionHandler(CartIsFinalizedException.class)
+   public ResponseEntity<ErrorDTO>cartIsFinalizedExceptionHandler(CartIsFinalizedException ex){
+       ErrorDTO error= new ErrorDTO(ex.getMessage(), ex.getCode().toString());
+       return new ResponseEntity<>(error, ex.getStatus());
+   }
     @ExceptionHandler(ProductPriceChangedException.class)
-    public ResponseEntity<Map<String, String>> productPriceChangedHandler(ProductPriceChangedException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("code", "OUTDATED_CART_PRICE");
-        errorResponse.put("message", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<ErrorDTO>productPriceChangedExceptionHandler(ProductPriceChangedException ex){
+        ErrorDTO error= new ErrorDTO(ex.getMessage(), ex.getCode().toString());
+        return new ResponseEntity<>(error, ex.getStatus());
     }
     @ExceptionHandler(UserIsDiferentFromSellerException.class)
-    public ResponseEntity<Map<String, String>> userDiferentFromSellerHandler(UserIsDiferentFromSellerException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("code", "USER_DIFERENT_FROM_SELLER");
-        errorResponse.put("message", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    public ResponseEntity<ErrorDTO>userIsDiferentFromSellerExceptionHandler(UserIsDiferentFromSellerException ex){
+        ErrorDTO error= new ErrorDTO(ex.getMessage(), ex.getCode().toString());
+        return new ResponseEntity<>(error, ex.getStatus());
     }
-
-
+   @ExceptionHandler(MethodArgumentNotValidException.class)
+   public ResponseEntity<List<ValidationErrorDTO>> methodArgumentNotValidHandler(MethodArgumentNotValidException ex) {
+       List<ValidationErrorDTO> errors = new ArrayList<>();
+       ex.getBindingResult().getAllErrors().forEach(error -> {
+           String fieldName = ((FieldError) error).getField();
+           String errorMessage = error.getDefaultMessage();
+           errors.add(new ValidationErrorDTO(fieldName, errorMessage));
+       });
+       return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+   }
 }

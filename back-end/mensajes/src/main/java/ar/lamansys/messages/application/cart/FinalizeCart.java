@@ -6,10 +6,12 @@ import ar.lamansys.messages.application.exception.CartIsFinalizedException;
 import ar.lamansys.messages.application.exception.CartUserNotExistsException;
 import ar.lamansys.messages.application.exception.ProductPriceChangedException;
 import ar.lamansys.messages.application.exception.StockNotAvailableException;
+import ar.lamansys.messages.application.exception.codeError.EProductPriceChangedException;
 import ar.lamansys.messages.application.product.AssertStockAvailable;
 import ar.lamansys.messages.application.product.port.ProductStorage;
 import ar.lamansys.messages.domain.cart.ProductShowCartBo;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -41,7 +43,7 @@ public class FinalizeCart {
             // Verifica que el precio no ha cambiado
             Integer currentUnitPrice = productStorage.findPriceByProductId(product.getProductId());
             if (!product.getUnitPrice().equals(currentUnitPrice)) {
-                throw new ProductPriceChangedException(product.getProductId(), product.getUnitPrice(), currentUnitPrice);
+                throw new ProductPriceChangedException(product.getProductId(), product.getUnitPrice(), currentUnitPrice, EProductPriceChangedException.OUTDATED_CART_PRICE, HttpStatus.UNPROCESSABLE_ENTITY);
             }
         }
 

@@ -4,18 +4,16 @@ import ar.lamansys.messages.application.cart.AssertCartIsNotFinalized;
 import ar.lamansys.messages.application.cart.AssertCartUserExist;
 import ar.lamansys.messages.application.cart.port.CartStorage;
 import ar.lamansys.messages.application.cartProduct.port.CartProductStorage;
-import ar.lamansys.messages.application.exception.CartIsFinalizedException;
 import ar.lamansys.messages.application.exception.CartUserNotExistsException;
-import ar.lamansys.messages.application.exception.ProductNotInCartException;
-import ar.lamansys.messages.application.exception.StockNotAvailableException;
+import ar.lamansys.messages.application.exception.codeError.ECartUserNotExistsException;
 import ar.lamansys.messages.application.product.AssertStockAvailable;
 import ar.lamansys.messages.application.product.port.ProductStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -84,7 +82,7 @@ public class UpdateQuantityTest {
         Integer productId = 10;
         Integer newQuantity = 3;
 
-        doThrow(new CartUserNotExistsException(cartId, appUserId)).when(assertCartUserExist).run(cartId, appUserId);
+        doThrow(new CartUserNotExistsException(cartId, appUserId, ECartUserNotExistsException.CART_MISMATCH, HttpStatus.FORBIDDEN)).when(assertCartUserExist).run(cartId, appUserId);
 
         // Act & Assert
         assertThrows(CartUserNotExistsException.class, () -> updateQuantity.run(cartId, appUserId, productId, newQuantity));

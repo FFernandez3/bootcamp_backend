@@ -2,6 +2,7 @@ package ar.lamansys.messages.infrastructure.input.rest.product;
 
 import ar.lamansys.messages.application.exception.UserIsDiferentFromSellerException;
 import ar.lamansys.messages.application.exception.UserNotExistsException;
+import ar.lamansys.messages.application.exception.codeError.EUserIsDiferentFromSellerException;
 import ar.lamansys.messages.application.product.AddProduct;
 import ar.lamansys.messages.application.product.DeleteProduct;
 import ar.lamansys.messages.application.product.ListProducts;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -138,7 +140,7 @@ public class ProductControllerTest {
         String sellerId="user1";
 
         // When
-        doThrow(new UserIsDiferentFromSellerException(userId, sellerId))
+        doThrow(new UserIsDiferentFromSellerException(userId, sellerId, EUserIsDiferentFromSellerException.USER_DIFERENT_FROM_SELLER, HttpStatus.FORBIDDEN))
                 .when(deleteProduct).run(userId, productId);
 
         // Then

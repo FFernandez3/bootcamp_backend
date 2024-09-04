@@ -6,6 +6,8 @@ import ar.lamansys.messages.application.exception.OpenCartException;
 import ar.lamansys.messages.application.exception.ProductNotExistsException;
 import ar.lamansys.messages.application.exception.StockNotAvailableException;
 import ar.lamansys.messages.application.exception.UserNotExistsException;
+import ar.lamansys.messages.application.exception.codeError.EOpenCartException;
+import ar.lamansys.messages.application.exception.codeError.EStockNotAvailableException;
 import ar.lamansys.messages.application.product.AssertStockAvailable;
 import ar.lamansys.messages.application.user.AssertUserExists;
 import ar.lamansys.messages.domain.cart.CartSummaryBo;
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -94,7 +97,7 @@ public class GetCartStateTest {
         String userId = "user123";
 
         doNothing().when(assertUserExists).run(userId);
-        doThrow(new OpenCartException("Cart not associated with user")).when(assertCartUserExist).run(cartId, userId);
+        doThrow(new OpenCartException("user12", EOpenCartException.OPEN_CART_ALREADY_EXIST, HttpStatus.BAD_REQUEST)).when(assertCartUserExist).run(cartId, userId);
 
         // Act & Assert
         assertThrows(OpenCartException.class, () -> getCartState.run(cartId, userId));
@@ -108,7 +111,7 @@ public class GetCartStateTest {
         ProductShowCartBo product = new ProductShowCartBo(1, "Product1", 1000, 10, 10000);
 
         when(cartProductStorage.findAllByCartId(cartId)).thenReturn(Stream.of(product));
-        doThrow(new StockNotAvailableException(product.getProductId(), product.getQuantity(), 5)).when(assertStockAvailable).run(product.getProductId(), product.getQuantity());
+        doThrow(new StockNotAvailableException(product.getProductId(), product.getQuantity(), 5, EStockNotAvailableException.INSUFFICIENT_STOCK, HttpStatus.UNPROCESSABLE_ENTITY)).when(assertStockAvailable).run(product.getProductId(), product.getQuantity());
 
         // Act & Assert
         assertThrows(StockNotAvailableException.class, () -> getCartState.run(cartId, userId));

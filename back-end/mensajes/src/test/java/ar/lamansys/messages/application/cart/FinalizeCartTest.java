@@ -5,6 +5,8 @@ import ar.lamansys.messages.application.cartProduct.port.CartProductStorage;
 import ar.lamansys.messages.application.exception.CartIsFinalizedException;
 import ar.lamansys.messages.application.exception.ProductPriceChangedException;
 import ar.lamansys.messages.application.exception.StockNotAvailableException;
+import ar.lamansys.messages.application.exception.codeError.ECartIsFinalizedException;
+import ar.lamansys.messages.application.exception.codeError.EStockNotAvailableException;
 import ar.lamansys.messages.application.product.AssertStockAvailable;
 import ar.lamansys.messages.application.product.port.ProductStorage;
 import ar.lamansys.messages.domain.cart.ProductShowCartBo;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -79,7 +82,7 @@ public class FinalizeCartTest {
         when(productStorage.findPriceByProductId(product.getProductId())).thenReturn(product.getUnitPrice());
         when(productStorage.getStock(product.getProductId())).thenReturn(10);
 
-        doThrow(new StockNotAvailableException(product.getProductId(), product.getQuantity(), 990))
+        doThrow(new StockNotAvailableException(product.getProductId(), product.getQuantity(), 990, EStockNotAvailableException.INSUFFICIENT_STOCK, HttpStatus.UNPROCESSABLE_ENTITY))
                 .when(assertStockAvailable).run(product.getProductId(), product.getQuantity());
 
         // Act & Assert
@@ -110,7 +113,7 @@ public class FinalizeCartTest {
         Integer cartId = 1;
         String appUserId = "user10";
 
-        doThrow(new CartIsFinalizedException(cartId)).when(assertCartIsNotFinalized).run(cartId);
+        doThrow(new CartIsFinalizedException(cartId, ECartIsFinalizedException.CART_IS_FINALIZED, HttpStatus.CONFLICT)).when(assertCartIsNotFinalized).run(cartId);
 
         // Act & Assert
         assertThrows(CartIsFinalizedException.class, () -> finalizeCart.run(cartId, appUserId));

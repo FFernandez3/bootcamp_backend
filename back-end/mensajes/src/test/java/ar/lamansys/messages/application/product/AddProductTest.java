@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import ar.lamansys.messages.application.exception.UserIsDiferentFromSellerException;
 import ar.lamansys.messages.application.exception.UserNotExistsException;
+import ar.lamansys.messages.application.exception.codeError.EUserIsDiferentFromSellerException;
 import ar.lamansys.messages.application.product.port.ProductStorage;
 import ar.lamansys.messages.application.user.AssertUserExists;
 import ar.lamansys.messages.domain.product.NewProductBo;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 
 public class AddProductTest {
 
@@ -72,7 +74,7 @@ public class AddProductTest {
         String userId = "user1";
         NewProductBo newProductBo = new NewProductBo("Product3", 45, 90, "differentUserId");
 
-        doThrow(new UserIsDiferentFromSellerException(userId, newProductBo.getUserId())).when(assertUserIsNotDiferentFromSeller).run(userId, newProductBo.getUserId());
+        doThrow(new UserIsDiferentFromSellerException(userId, newProductBo.getUserId(), EUserIsDiferentFromSellerException.USER_DIFERENT_FROM_SELLER, HttpStatus.FORBIDDEN)).when(assertUserIsNotDiferentFromSeller).run(userId, newProductBo.getUserId());
 
         // Act & Assert
         UserIsDiferentFromSellerException thrown = assertThrows(UserIsDiferentFromSellerException.class, () -> {

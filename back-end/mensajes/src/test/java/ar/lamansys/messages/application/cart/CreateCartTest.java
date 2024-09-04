@@ -6,6 +6,9 @@ import ar.lamansys.messages.application.exception.OpenCartException;
 import ar.lamansys.messages.application.exception.ProductNotExistsException;
 import ar.lamansys.messages.application.exception.StockNotAvailableException;
 import ar.lamansys.messages.application.exception.UserNotExistsException;
+import ar.lamansys.messages.application.exception.codeError.EOpenCartException;
+import ar.lamansys.messages.application.exception.codeError.EProductNotExistsException;
+import ar.lamansys.messages.application.exception.codeError.EStockNotAvailableException;
 import ar.lamansys.messages.application.product.AssertProductExists;
 import ar.lamansys.messages.application.product.AssertStockAvailable;
 import ar.lamansys.messages.application.product.port.ProductStorage;
@@ -18,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -102,7 +106,7 @@ public class CreateCartTest {
         Integer productId = 1;
         NewCartBo cartBo = new NewCartBo(productId, 2);
         doNothing().when(assertUserExists).run(userId);
-        doThrow(new ProductNotExistsException(productId)).when(assertProductExists).run(productId);
+        doThrow(new ProductNotExistsException(productId, EProductNotExistsException.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND)).when(assertProductExists).run(productId);
 
         // Act & Assert
         assertThrows(ProductNotExistsException.class, () -> createCart.run(userId, cartBo));
@@ -117,7 +121,7 @@ public class CreateCartTest {
         NewCartBo cartBo = new NewCartBo(productId, quantity);
         doNothing().when(assertUserExists).run(userId);
         doNothing().when(assertProductExists).run(productId);
-        doThrow(new StockNotAvailableException(productId, quantity, 5)).when(assertStockAvailable).run(productId, quantity);
+        doThrow(new StockNotAvailableException(productId, quantity, 5, EStockNotAvailableException.INSUFFICIENT_STOCK, HttpStatus.UNPROCESSABLE_ENTITY)).when(assertStockAvailable).run(productId, quantity);
 
         // Act & Assert
         assertThrows(StockNotAvailableException.class, () -> createCart.run(userId, cartBo));
@@ -132,7 +136,7 @@ public class CreateCartTest {
         doNothing().when(assertUserExists).run(userId);
         doNothing().when(assertProductExists).run(productId);
         doNothing().when(assertStockAvailable).run(productId, cartBo.getQuantity());
-        doThrow(new OpenCartException("seller123")).when(assertOpenCartBetweenSellerAndBuyerNotExists).run(userId, productId);
+        doThrow(new OpenCartException("seller123", EOpenCartException.OPEN_CART_ALREADY_EXIST, HttpStatus.BAD_REQUEST)).when(assertOpenCartBetweenSellerAndBuyerNotExists).run(userId, productId);
 
         // Act & Assert
         assertThrows(OpenCartException.class, () -> createCart.run(userId, cartBo));
