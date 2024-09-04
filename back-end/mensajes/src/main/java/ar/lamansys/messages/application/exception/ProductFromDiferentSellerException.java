@@ -5,16 +5,12 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class ProductFromDiferentSellerException extends RuntimeException{
+public class ProductFromDiferentSellerException extends CustomException{
     private final Integer cartId;
     private final Integer productId;
-    private EProductFromDiferentSellerException code;
-    private HttpStatus status;
     public ProductFromDiferentSellerException(Integer cartId, Integer productId, EProductFromDiferentSellerException code, HttpStatus status){
-        super(String.format("The seller of the product with id %d is different from the seller of the cart with id %d",productId,cartId));
+        super(String.format("The seller of the product with id %d is different from the seller of the cart with id %d",productId,cartId), code.toString(), status);
         this.cartId=cartId;
         this.productId=productId;
-        this.code=code;
-        this.status=status;
     }
 }

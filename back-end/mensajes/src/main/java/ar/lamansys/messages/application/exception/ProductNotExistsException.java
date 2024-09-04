@@ -5,15 +5,10 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class ProductNotExistsException extends RuntimeException {
+public class ProductNotExistsException extends CustomException {
     private Integer productId;
-    private EProductNotExistsException code;
-    private HttpStatus status;
-
     public ProductNotExistsException(Integer productId, EProductNotExistsException code, HttpStatus status) {
-        super(String.format("Product %s doesn't exist", productId));
+        super(String.format("Product %s doesn't exist", productId), code.toString(), status);
         this.productId = productId;
-        this.code=code;
-        this.status=status;
     }
 }

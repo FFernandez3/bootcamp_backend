@@ -5,15 +5,10 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class CartIsFinalizedException extends RuntimeException{
+public class CartIsFinalizedException extends CustomException{
     private Integer cartId;
-    private ECartIsFinalizedException code;
-    private HttpStatus status;
-
     public CartIsFinalizedException(Integer cartId, ECartIsFinalizedException code, HttpStatus status){
-        super(String.format("The cart with id %d is being processed, you cannot modify it",cartId));
+        super(String.format("The cart with id %d is being processed, you cannot modify it",cartId), code.toString(), status);
         this.cartId=cartId;
-        this.code=code;
-        this.status=status;
     }
 }

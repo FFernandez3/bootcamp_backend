@@ -5,16 +5,12 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class CartUserNotExistsException extends RuntimeException{
+public class CartUserNotExistsException extends CustomException{
     private final Integer cartId;
     private final String appUserId;
-    private ECartUserNotExistsException code;
-    private HttpStatus status;
     public CartUserNotExistsException(Integer cartId, String appUserId,ECartUserNotExistsException code, HttpStatus status){
-        super(String.format("A cart with ID %d doesn´t exists for user with id %s", cartId, appUserId));
+        super(String.format("A cart with ID %d doesn´t exists for user with id %s", cartId, appUserId),code.toString(), status);
         this.cartId=cartId;
         this.appUserId=appUserId;
-        this.code=ECartUserNotExistsException.CART_MISMATCH;
-        this.status=status;
     }
 }
