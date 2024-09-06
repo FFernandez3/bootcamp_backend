@@ -23,8 +23,4 @@ public class ProductRequestDTO {
     @NotNull
     @Positive
     private Integer unitPrice;
-    @NotNull
-    @NotEmpty
-    @NotBlank
-    private String userId;
 }

@@ -36,10 +36,10 @@ public class Product {
     public Product(Integer id) {
         this.id = id;
     }
-    public Product (NewProductBo bo){
+    public Product (String userId, NewProductBo bo){
         this.name=bo.getName();
         this.stock=bo.getStock();
         this.unitPrice=bo.getUnitPrice();
-        this.userId=bo.getUserId();
+        this.userId=userId;
     }
 }

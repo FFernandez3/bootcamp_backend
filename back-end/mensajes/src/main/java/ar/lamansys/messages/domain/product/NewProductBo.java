@@ -9,5 +9,5 @@ public class NewProductBo {
     String name;
     Integer stock;
     Integer unitPrice;
-    String userId;
+    //String userId;
 }

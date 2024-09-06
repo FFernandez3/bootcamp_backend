@@ -29,9 +29,6 @@ public class ProductMapper {
         return new NewProductBo(
                 requestDTO.getName(),
                 requestDTO.getStock(),
-                requestDTO.getUnitPrice(),
-                requestDTO.getUserId());
+                requestDTO.getUnitPrice());
     }
-
-
 }

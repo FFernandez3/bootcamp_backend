@@ -13,11 +13,9 @@ import org.springframework.stereotype.Service;
 public class AddProduct {
     private final ProductStorage productStorage;
     private final AssertUserExists assertUserExists;
-    private final AssertUserIsNotDiferentFromSeller assertUserIsNotDiferentFromSeller;
 
     public void run (String userId, NewProductBo newProductBo) throws UserNotExistsException, UserIsDiferentFromSellerException {
         assertUserExists.run(userId);
-        assertUserIsNotDiferentFromSeller.run(userId, newProductBo.getUserId());
-        productStorage.save(newProductBo);
+        productStorage.save(userId, newProductBo);
     }
 }

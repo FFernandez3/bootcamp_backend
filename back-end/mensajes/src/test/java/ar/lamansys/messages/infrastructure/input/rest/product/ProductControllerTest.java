@@ -85,8 +85,8 @@ public class ProductControllerTest {
     void addProduct_ok() throws Exception {
         // Arrange
         String userId = "user1";
-        ProductRequestDTO productRequestDTO = new ProductRequestDTO("Product1", 40, 600, userId);
-        NewProductBo newProductBo = new NewProductBo("Product1", 40, 600, userId);
+        ProductRequestDTO productRequestDTO = new ProductRequestDTO("Product1", 40, 600);
+        NewProductBo newProductBo = new NewProductBo("Product1", 40, 600);
 
         when(productMapper.productRequestDTOToNewProductBo(productRequestDTO)).thenReturn(newProductBo);
 

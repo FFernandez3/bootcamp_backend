@@ -7,7 +7,6 @@ import ar.lamansys.messages.infrastructure.output.entity.Product;
 import ar.lamansys.messages.infrastructure.output.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
@@ -16,7 +15,7 @@ public class ProductStorageImpl implements ProductStorage {
     private final ProductRepository repository;
 
     @Override
-    public void save(NewProductBo newProductBo) { repository.save(new Product(newProductBo)); }
+    public void save(String userId, NewProductBo newProductBo) { repository.save(new Product(userId, newProductBo)); }
 
     @Override
     public Stream<ProductStoredBo> findAllByUserId(String sellerId) {

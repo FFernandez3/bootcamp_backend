@@ -7,7 +7,8 @@ import java.util.stream.Stream;
 import java.util.Optional;
 
 public interface ProductStorage {
-    void save(NewProductBo newProductBo);
+    void save(String userId,NewProductBo newProductBo);
+
     Stream<ProductStoredBo> findAllByUserId(String sellerId);
 
     boolean exists(Integer productId);
@@ -17,7 +18,6 @@ public interface ProductStorage {
     String getSellerByProductId(Integer productId);
 
     Integer getUnitPrice(Integer productId);
-
 
     Integer findPriceByProductId(Integer productId);
 
